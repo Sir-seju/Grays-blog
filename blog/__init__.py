@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -36,3 +37,14 @@ def create_app(config_class=Config):
 
 
     return app
+
+
+def create_db():
+    path = os.getcwd()
+    site_exists = os.path.isfile(os.path.join(path, "site.db"))
+    if site_exists:
+        pass
+    else:
+        db.create_all(app=create_app())
+
+create_db()
