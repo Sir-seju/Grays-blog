@@ -1,4 +1,4 @@
-blog/venv
+./blog/venv
 blog2
 *pycache*
 
