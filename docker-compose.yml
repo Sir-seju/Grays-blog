@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile.dev  
     expose: 
       - 5000 
-    command: "python3 blog/run.py"
+    command: "gunicorn -b 0.0.0.0:5000 run:app"
     environment: 
       - "SQLALCHEMY_DATABASE_URI=sqlite:///site.db"
       - SECRET_KEY=e1c7c3c452a1bf623c52aec0a038c55630
