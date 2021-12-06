@@ -1,0 +1,17 @@
+FROM python:3.9.5-slim-buster
+
+WORKDIR /usr/src
+
+RUN apt-get update
+
+RUN apt-get install libpq-dev gcc python-dev -y
+
+COPY requirements.txt .
+
+RUN python -m venv venv
+
+RUN pip3 install -r requirements.txt
+
+COPY blog /usr/src/blog
+
+ENV PYTHONPATH "${PYTHONPATH}:/usr/src/blog"

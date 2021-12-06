@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from blog import login_manager, db
@@ -9,12 +10,13 @@ from flask_login import UserMixin
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+pics = ["default0.jpg", "default1.jpg", "default2.jpg", "default3.jpg", "default4.jpg", "default5.jpg", "default6.jpg"]
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    image_file = db.Column(db.String(20), nullable=False, default=random.choice(pics))
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
 
