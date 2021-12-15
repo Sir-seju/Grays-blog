@@ -9,7 +9,7 @@ import random
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-pics = ["default.jpg", "default2.jpg", "default3.jpg", "default4.jpg", "default5.jpg", "default6.jpg"] 
+pics = ["default0.jpg", "default1.jpg", "default2.jpg", "default3.jpg", "default4.jpg", "default5.jpg", "default6.jpg"] 
  
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
