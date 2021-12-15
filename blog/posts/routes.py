@@ -1,3 +1,4 @@
+import os
 from flask import redirect, url_for, render_template, flash, request, abort, Blueprint
 from blog import db
 from blog.posts.forms import PostForm
@@ -6,7 +7,7 @@ from flask_login import current_user, login_required
 
 
 posts = Blueprint('posts', __name__)
-
+blog_name = os.environ.get("USER_BLOG")
 
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
@@ -19,12 +20,12 @@ def new_post():
         flash('Your post has been created!', 'success')
         return redirect(url_for('main.home'))
     return render_template('create_post.html', title='New post',
-                            form=form, legend = 'Create New Post')
+                            form=form, legend = 'Create New Post', main_blog=blog_name)
 
 @posts.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
+    return render_template('post.html', title=post.title, post=post, main_blog=blog_name)
 
 
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -44,7 +45,7 @@ def update_post(post_id):
         form.title.data = post.title
         form.content.data = post.content
     return render_template('create_post.html', title='Update Post',
-                           form=form, legend='Update Post')
+                           form=form, legend='Update Post', main_blog=blog_name)
 
 
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
