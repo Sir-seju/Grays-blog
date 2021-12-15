@@ -4,6 +4,7 @@ from blog import bcrypt, db
 from blog.models import Post, User
 from flask_login import login_user, current_user, logout_user, login_required
 from blog.users.utils import save_picture, send_reset_email
+from blog.posts.routes import blog_name
 
 users = Blueprint('users', __name__)
 
@@ -20,7 +21,7 @@ def register():
         db.session.commit()
         flash(f'Account created for {form.username.data}, you can now log in', 'success')
         return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form, main_blog=blog_name)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -36,7 +37,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    return render_template('login.html', title='Login', form=form, main_blog=blog_name)
 
 @users.route("/logout")
 def logout():
@@ -61,7 +62,7 @@ def account():
         form.email.data = current_user.email
     image_file = url_for('static', filename='profilepics/' + current_user.image_file)
     return render_template('account.html', title='Account',
-                           image=image_file, form=form)
+                           image=image_file, form=form, main_blog=blog_name)
 
 @users.route("/user/<string:username>")
 def user_posts(username):
@@ -70,7 +71,7 @@ def user_posts(username):
     posts = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
+    return render_template('user_posts.html', posts=posts, user=user, main_blog=blog_name)
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
@@ -82,7 +83,7 @@ def reset_request():
         send_reset_email(user)
         flash('An email has been sent with instructions to reset your password.', 'info')
         return redirect(url_for('users.login'))
-    return render_template('reset_request.html', title='Reset Password', form=form)
+    return render_template('reset_request.html', title='Reset Password', form=form, main_blog=blog_name)
 
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
@@ -100,4 +101,4 @@ def reset_token(token):
         db.session.commit()
         flash('Your password has been updated! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
-    return render_template('reset_token.html', title='Reset Password', form=form)
+    return render_template('reset_token.html', title='Reset Password', form=form, main_blog=blog_name)
