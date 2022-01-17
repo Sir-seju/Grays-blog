@@ -9,9 +9,9 @@ services:
     command: "gunicorn -b 0.0.0.0:5000 run:app"
     environment: 
       - "SQLALCHEMY_DATABASE_URI=sqlite:///site.db"
-      - SECRET_KEY=e1c7c3c452a1bf623c52aec0a038c55630
-      - USER_EMAIL=***REMOVED***
-      - USER_PASSWORD=***REMOVED***
+      - SECRET_KEY=SECRET_KEY
+      - USER_EMAIL=EMAIL
+      - USER_PASSWORD=PASSWORD
     restart: always 
     volumes: 
       - ./blog2:/blog 
